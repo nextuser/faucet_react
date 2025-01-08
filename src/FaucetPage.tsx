@@ -45,9 +45,9 @@ export const FaucetPage = () => {
         try {
           const res = await fetch(`${faucet_config.rpc_url}?recipient=${recipient}`, {
             method: 'GET',
-            // headers: {
-            //   'Content-Type': 'application/json',
-            // },
+            headers: {
+              'Content-Type':  'text/plain',
+            },
             // body: JSON.stringify(formData),
           });
           set_faucet_enable(true);
@@ -149,19 +149,21 @@ export const FaucetPage = () => {
             <input type="text"  id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             value={recipient} onChange={(e)=>setRecipient(e.target.value)} placeholder="0x..." required />
       </div>
-
-      <button
+      <div>
+      <button id="request_faucet"
         onClick={handleRequestFaucet}
         className="bg-blue-300 text-white px-4 py-2 rounded dark:bg-blue-500 dark:hover:bg-blue-600 hover:bg-blue-400"
         disabled={!faucet_enable}
       >
         Request Faucet
       </button>
-    </div>
-    <div>
-    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{msg}</label>
+
       
+      <label htmlFor="request_faucet" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{msg}</label>
+      
+      </div>
     </div>
+
 
     </>
 }
