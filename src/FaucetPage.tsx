@@ -1,7 +1,7 @@
 import {useState,useEffect} from 'react'
 import { SuiClient, getFullnodeUrl  } from '@mysten/sui/client';
 import { faucet_config } from '../common/config';
-import { FaucetResult } from '../common/type';
+//import { FaucetResult } from '../common/type';
 
 const FAUCET=faucet_config.faucet_address
 
@@ -14,11 +14,11 @@ function isAddrValid(str : string):boolean{
 
 let test_client = new SuiClient({url:getFullnodeUrl('testnet')});
 let main_client = new SuiClient({url:getFullnodeUrl('mainnet')});
-interface ReqData  {  
-    FixedAmountRequest: {
-        recipient: string
-    }
-  };
+// interface ReqData  {  
+//     FixedAmountRequest: {
+//         recipient: string
+//     }
+//   };
 
 const default_msg = `Welcome : faucet ${faucet_config.faucet_amount/1e9} SUI  testnet once a day, when you have at lease ${faucet_config.mainnet_balance_limit/1e9} SUI in mainnet`
 export const FaucetPage = () => {
@@ -32,7 +32,11 @@ export const FaucetPage = () => {
 
     let [faucet_enable , set_faucet_enable ] = useState(false)
 
-
+    const redirect_faucet = ()=>{
+      const url = `https://faucet-rpc.vercel.app/v1/gas?recipient=${recipient}`
+      window.location.href=url;
+    }
+/*
     const handleRequestFaucet = async (e: React.FormEvent) => {
         e.preventDefault();
         set_faucet_enable(false);
@@ -75,6 +79,7 @@ export const FaucetPage = () => {
             console.log(`Error: ${error}`);
         }
       };
+*/
     useEffect( ()=>{
 
         let enable = total_balance >  (faucet_config.faucet_amount + faucet_config.gas_budget)/1e9;
@@ -151,7 +156,7 @@ export const FaucetPage = () => {
       </div>
       <div>
       <button id="request_faucet"
-        onClick={handleRequestFaucet}
+        onClick={redirect_faucet}
         className="bg-blue-300 text-white px-4 py-2 rounded dark:bg-blue-500 dark:hover:bg-blue-600 hover:bg-blue-400"
         disabled={!faucet_enable}
       >
