@@ -1,7 +1,6 @@
 import { Transaction } from "@mysten/sui/transactions";
 import {  SuiClient, getFullnodeUrl} from '@mysten/sui/client'
-import {PaginatedEvents} from "@mysten/sui/client"
-import { faucet_config } from "../src/config";
+import { faucet_config } from "../common/config";
 import {signer} from './local_key'
 import { FaucetResult } from "../common/type";
 
@@ -68,11 +67,15 @@ function test_duplicate_faucet(){
         }
     });
 
-    faucet('0xafe36044ef56d22494bfe6231e78dd128f097693f2d974761ee4d649e61f5fa2').then(([success, message]) => {
-        if (success) {
+    faucet('0xafe36044ef56d22494bfe6231e78dd128f097693f2d974761ee4d649e61f5fa2').then((result) => {
+        if (result.succ) {
             console.log('Faucet successful');
         } else {
-            console.error('Faucet failed:', message);
-            }
+            console.error('Faucet failed:', result.msg);
+        }
     });
+}
+
+if( process.env.TEST){
+    test_duplicate_faucet();
 }

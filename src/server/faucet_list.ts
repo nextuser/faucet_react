@@ -2,7 +2,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 import {  SuiClient, getFullnodeUrl} from '@mysten/sui/client'
 import {signer} from './local_key'
-import {faucet_config} from '../src/config'
+import {faucet_config} from '../common/config'
 const test_client = new SuiClient({ url: getFullnodeUrl('testnet')});
 const main_client = new SuiClient({ url: getFullnodeUrl('mainnet')});
 const MAIN_LIMIT = faucet_config.mainnet_balance_limit

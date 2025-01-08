@@ -1,7 +1,7 @@
 import {useState,useEffect} from 'react'
 import { SuiClient, getFullnodeUrl  } from '@mysten/sui/client';
-import { faucet_config } from './config';
-import { FaucetResult } from '../common/type';
+import { faucet_config } from './common/config';
+import { FaucetResult } from './common/type';
 
 const FAUCET=faucet_config.faucet_address
 
@@ -35,7 +35,7 @@ export const FaucetPage = () => {
 
     const handleRequestFaucet = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        set_faucet_enable(false);
         let formData :ReqData ={
             FixedAmountRequest:{
                 recipient:""
@@ -50,9 +50,10 @@ export const FaucetPage = () => {
             },
             body: JSON.stringify(formData),
           });
-    
+          set_faucet_enable(true);
           if (!res.ok) {
-            throw new Error('Network response was not ok');
+            setMsg('Network response was not ok');
+            return;
           }
     
           const result : FaucetResult = await res.json();
@@ -80,7 +81,7 @@ export const FaucetPage = () => {
         if(enable){
           enable = mainnet_balance >= faucet_config.mainnet_balance_limit/1e9
           if(!enable){
-            setMsg(`this address has no enough balance in mainnet . at least ${faucet_config.mainnet_balance_limit/1e9}`);
+            setMsg(`this address has no enough balance in mainnet . you need at least ${faucet_config.mainnet_balance_limit/1e9} SUI @mainnet`);
           }
           else{
             setMsg('Click the button to request faucet')
@@ -158,7 +159,7 @@ export const FaucetPage = () => {
       </button>
     </div>
     <div>
-      <label >{msg}</label>
+      <p>{msg}</p>
     </div>
 
     </>

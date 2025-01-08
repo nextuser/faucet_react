@@ -4,3 +4,4 @@ node_modules
 *.bak
 .out
 .err
+bak

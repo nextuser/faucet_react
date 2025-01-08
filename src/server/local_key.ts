@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as  dotenv from 'dotenv';
-import * as path from 'path'
+import  path from 'path'
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import {fromBase64} from '@mysten/bcs'
 dotenv.config();
