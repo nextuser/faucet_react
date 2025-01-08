@@ -1,5 +1,5 @@
 {
-  "name": "faucet",
+  "name": "faucet-page",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,8 +7,7 @@
     "dev": "vite  ",
     "build": "tsc && vite build ",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "serve": "./run_server"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@mysten/bcs": "^1.2.0",

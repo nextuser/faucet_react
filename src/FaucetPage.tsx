@@ -1,7 +1,7 @@
 import {useState,useEffect} from 'react'
 import { SuiClient, getFullnodeUrl  } from '@mysten/sui/client';
-import { faucet_config } from './common/config';
-import { FaucetResult } from './common/type';
+import { faucet_config } from '../common/config';
+import { FaucetResult } from '../common/type';
 
 const FAUCET=faucet_config.faucet_address
 
