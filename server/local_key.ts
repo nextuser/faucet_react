@@ -4,7 +4,9 @@ import  path from 'path'
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import {fromBase64} from '@mysten/bcs'
 import { faucet_config } from '../common/config';
-import { config } from 'process';
+import { config, exit } from 'process';
+import { sign } from 'crypto';
+import { Signer } from '@mysten/sui/cryptography';
 dotenv.config();
 // 初始化SUI Client, 用于和主网(mainnet)交互
 // 从环境变量读取secretKey
@@ -14,14 +16,18 @@ dotenv.config();
 // const secretKeyBytes = fromBase64(secretKey).slice(1); // 发起方账户私钥
 // export const signer = Ed25519Keypair.fromSecretKey(secretKeyBytes); // 生成签名者
 
-const mnemonic = process.env.MNEMONIC || ''
-if(mnemonic == "") {
-    console.error("export  MNMONIC FIRST");
-} 
-export const signer = Ed25519Keypair.deriveKeypair(mnemonic);
-console.log(`signer.address=${signer.toSuiAddress}`);
-faucet_config.faucet_address = signer.toSuiAddress();
-console.log(`config.address=${faucet_config.faucet_address}`);
+export function getSigner(): Ed25519Keypair{
+    const mnemonic = process.env.MNEMONIC || ''
+    if(mnemonic == "") {
+        console.error("export  MNMONIC FIRST");
+        exit("no MNEMNIC environ variable")
+    } 
+    let signer = Ed25519Keypair.deriveKeypair(mnemonic);
+    console.log(`signer.address=${signer.toSuiAddress}`);
+    faucet_config.faucet_address = signer.toSuiAddress();
+    console.log(`config.address=${faucet_config.faucet_address}`);
+    return signer;
+}
 /**
  * 
  * @returns read .key

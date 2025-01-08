@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 import {  SuiClient, getFullnodeUrl} from '@mysten/sui/client'
 import { faucet_config } from "../common/config";
-import {signer} from './local_key'
+import {getSigner} from './local_key'
 import { FaucetResult } from "../common/type";
 
 const test_client = new SuiClient({ url: getFullnodeUrl('testnet') });
@@ -31,7 +31,7 @@ export async  function faucet(target:string) :Promise<FaucetResult>{
     let tx = new Transaction();
     let coin = tx.splitCoins(tx.gas,[tx.pure.u64(faucet_config.faucet_amount)]);
     tx.transferObjects([coin],tx.pure.address(target));
-    let sign_resp = await test_client.signAndExecuteTransaction({transaction:tx,signer});
+    let sign_resp = await test_client.signAndExecuteTransaction({transaction:tx,signer:getSigner()});
     let resp = await test_client.waitForTransaction({digest:sign_resp.digest,options:{showEffects:true,showBalanceChanges:true,showEvents:true}});
     if(resp.errors){
         console.log("tx.digest:",sign_resp.digest,",tx error:",resp.errors);
@@ -52,10 +52,13 @@ export async  function faucet(target:string) :Promise<FaucetResult>{
     }
 }
 
-//每天清空一次
-setInterval(async ()=>{
-    allocSet.clear();
-},24*60*60*1000)
+export function  clearDaily(){
+    console.log("clear daily!");
+    //每天清空一次
+    setInterval(async ()=>{
+        allocSet.clear();
+    },24*60*60*1000)
+}
 
 
 function test_duplicate_faucet(){

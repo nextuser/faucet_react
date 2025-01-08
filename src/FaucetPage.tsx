@@ -58,7 +58,7 @@ export const FaucetPage = () => {
     
           const result : FaucetResult = await res.json();
           console.log(result)
-          let str = result.succ ? 'faucet success':'faucet failed:' ;
+          let str = result.succ ? 'faucet success.':'faucet failed:' ;
           if(result.digest){
             str += `transaction digest=${result.digest}`
           }

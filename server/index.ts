@@ -1,14 +1,15 @@
 import express from 'express';
-import { faucet } from './faucet';
+import { faucet,clearDaily } from './faucet';
 import dotenv from 'dotenv'
 import cors from 'cors'
 import {ViteDevServer,ProxyOptions} from 'vite'
 import {faucet_config} from '../common/config'
 import path from 'path';
 
-dotenv.config()
 
+dotenv.config()
 const app = express();
+
 
 export interface ReqData  {  
   FixedAmountRequest: {
@@ -77,7 +78,7 @@ const proxy:Record<string,string|ProxyOptions> ={
 }
 
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV == 'test') {
   app.get('/help',(req,res)=>{
     res.send(msg)
   });
@@ -86,6 +87,10 @@ if (process.env.NODE_ENV !== 'production') {
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
+}
+
+if(process.env.RUNNING == 'OK'){
+  clearDaily();
 }
 
 

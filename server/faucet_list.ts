@@ -1,7 +1,7 @@
 
 import { Transaction } from "@mysten/sui/transactions";
 import {  SuiClient, getFullnodeUrl} from '@mysten/sui/client'
-import {signer} from './local_key'
+import {getSigner} from './local_key'
 import {faucet_config} from '../common/config'
 const test_client = new SuiClient({ url: getFullnodeUrl('testnet')});
 const main_client = new SuiClient({ url: getFullnodeUrl('mainnet')});
@@ -40,7 +40,7 @@ async  function faucet_list(targets:string[]) :Promise<FaucetResult[]>{
     let results :FaucetResult[] = [];
     let amount_list:number[] = [];
     let to_list:string[] = [];
-    let left_balance = await main_client.getBalance({owner:signer.toSuiAddress()});
+    let left_balance = await main_client.getBalance({owner:getSigner().toSuiAddress()});
     let  max_count = (Number(left_balance.totalBalance) - GAS_BUDGET) / FAUCET_AMOUNT;
    
     const transfers: Transfer[] = [];
@@ -77,7 +77,7 @@ async  function faucet_list(targets:string[]) :Promise<FaucetResult[]>{
     });
 
     
-    let sign_resp = await test_client.signAndExecuteTransaction({transaction:tx,signer});
+    let sign_resp = await test_client.signAndExecuteTransaction({transaction:tx,signer:getSigner()});
     //tx.setGasBudget(GAS_BUDGET)
     let resp = await test_client.waitForTransaction({digest:sign_resp.digest,options:{showEffects:true,showBalanceChanges:true,showEvents:true}});
     if(resp.errors){
