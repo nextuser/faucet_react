@@ -6,9 +6,10 @@
   "scripts": {
     "clean" : "rm -rf dist",
     "dev": "RUNNING=OK && vite  ",
-    "build": "tsc && vite build ",
+    "build": "RUNNING=FALSE && tsc && vite build ",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "RUNNING=OK  && vite preview"
+    "preview": "RUNNING=OK  && vite preview",
+    "start": "RUNNING=OK  && vite"
   },
   "dependencies": {
     "@mysten/bcs": "^1.2.0",
