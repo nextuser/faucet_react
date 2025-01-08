@@ -3,15 +3,25 @@ import * as  dotenv from 'dotenv';
 import  path from 'path'
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import {fromBase64} from '@mysten/bcs'
+import { faucet_config } from '../common/config';
+import { config } from 'process';
 dotenv.config();
 // 初始化SUI Client, 用于和主网(mainnet)交互
 // 从环境变量读取secretKey
 //AAa...   ~/keys/*.key
-const secretKey = process.env.SECRET_KEY || get_key();;
-/** 这里把base64编码的secretKey转换为字节数组后截掉第一个元素，是因为第一位是一个私钥类型的标记位，后续派生签名者时不需要 **/
-const secretKeyBytes = fromBase64(secretKey).slice(1); // 发起方账户私钥
-export const signer = Ed25519Keypair.fromSecretKey(secretKeyBytes); // 生成签名者
+// const secretKey = process.env.SECRET_KEY || get_key();;
+// /** 这里把base64编码的secretKey转换为字节数组后截掉第一个元素，是因为第一位是一个私钥类型的标记位，后续派生签名者时不需要 **/
+// const secretKeyBytes = fromBase64(secretKey).slice(1); // 发起方账户私钥
+// export const signer = Ed25519Keypair.fromSecretKey(secretKeyBytes); // 生成签名者
 
+const mnemonic = process.env.MNEMONIC || ''
+if(mnemonic == "") {
+    console.error("export  MNMONIC FIRST");
+} 
+export const signer = Ed25519Keypair.deriveKeypair(mnemonic);
+console.log(`signer.address=${signer.toSuiAddress}`);
+faucet_config.faucet_address = signer.toSuiAddress();
+console.log(`config.address=${faucet_config.faucet_address}`);
 /**
  * 
  * @returns read .key
