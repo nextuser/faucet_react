@@ -43,12 +43,12 @@ export const FaucetPage = () => {
         }
         formData.FixedAmountRequest.recipient = recipient;
         try {
-          const res = await fetch(faucet_config.rpc_url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
+          const res = await fetch(`${faucet_config.rpc_url}?recipient=${recipient}`, {
+            method: 'GET',
+            // headers: {
+            //   'Content-Type': 'application/json',
+            // },
+            // body: JSON.stringify(formData),
           });
           set_faucet_enable(true);
           if (!res.ok) {
@@ -159,7 +159,8 @@ export const FaucetPage = () => {
       </button>
     </div>
     <div>
-      <p>{msg}</p>
+    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{msg}</label>
+      
     </div>
 
     </>
