@@ -2,11 +2,10 @@ import * as fs from 'fs';
 import * as  dotenv from 'dotenv';
 import  path from 'path'
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import {fromBase64} from '@mysten/bcs'
+
 import { faucet_config } from '../common/config';
-import { config, exit } from 'process';
-import { sign } from 'crypto';
-import { Signer } from '@mysten/sui/cryptography';
+import { exit } from 'process';
+
 dotenv.config();
 // 初始化SUI Client, 用于和主网(mainnet)交互
 // 从环境变量读取secretKey
@@ -20,7 +19,7 @@ export function getSigner(): Ed25519Keypair{
     const mnemonic = process.env.MNEMONIC || ''
     if(mnemonic == "") {
         console.error("export  MNMONIC FIRST");
-        exit("no MNEMNIC environ variable")
+        exit("no MNEMNIC environment variable")
     } 
     let signer = Ed25519Keypair.deriveKeypair(mnemonic);
     console.log(`signer.address=${signer.toSuiAddress}`);
