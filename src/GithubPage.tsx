@@ -154,7 +154,7 @@ function GithubPage( props : { update_history : ()=>void }) {
   // 登录后场景
   if(gitToken && gitToken.length > 0) {
     return <>
-    	<Flex direction="column" gap="2" maxWidth="600px">
+    	<Flex direction="column" gap="2" maxWidth="800px">
 	      <label htmlFor='address'>Sui address</label>
         <TextField.Root id="address" variant="surface" value={address} onChange={(e)=>setAddress(e.target.value)} placeholder="0xafed3..." />
         <Button className="cursor-pointer disabled:cursor-not-allowed" onClick={()=>requestFaucet(gitToken)} disabled={ gitToken == "" || address === "" } >Reques Faucet</Button>
@@ -164,7 +164,7 @@ function GithubPage( props : { update_history : ()=>void }) {
     </>
   }
   //未登录场景
-  return <Flex direction="column" gap="2" maxWidth="600px">
+  return <Flex direction="column" gap="2" maxWidth="800px">
     <Button className="cursor-pointer" onClick={oAuthGitHub} >Github Login</Button>
     {msg && <label>{msg}</label>}
     </Flex>

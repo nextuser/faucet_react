@@ -42,11 +42,17 @@ const  TransactionHistory = (props:{ transactions:SuiTransactionBlockResponse[]}
 console.log('arr:',props.transactions);
 
 return (
-props.transactions.map((tx:SuiTransactionBlockResponse)=>
-<div
-    className="w-600 rounded-xl border border-zinc-200 bg-white text-zinc-950 shadow dark:border-zinc-800 dark:text-zinc-50 overflow-hidden transition-all hover:shadow-md mb-2 dark:bg-gray-800">
+<>
+<br/>
+<hr/>
+<h2 className='text-2xl font-bold mb-4'>Transaction Histories</h2>
+<div className='div_600'>
+{props.transactions.map((tx:SuiTransactionBlockResponse)=>
+<div 
+    className="  rounded-xl border border-zinc-200 bg-white text-zinc-950 shadow dark:border-zinc-800 dark:text-zinc-50 overflow-hidden transition-all hover:shadow-md mb-2 dark:bg-gray-800">
+  
     <div
-        className="flex flex-col space-y-1.5 p-6 py-3 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 border-b dark:border-gray-700">
+        className=" flex flex-col space-y-1.5 p-6 py-3 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 border-b dark:border-gray-700">
         <div className="flex items-center justify-between">
             <div className="tracking-tight text-base font-medium text-gray-900 dark:text-gray-100">Transaction</div><span
                 className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">{tx.effects!.status.status}</span>
@@ -73,7 +79,7 @@ props.transactions.map((tx:SuiTransactionBlockResponse)=>
                     </svg><span className="hidden sm:inline">View</span></button></div>
         </div>
     </div>
-    <div className="p-6 py-2">
+    <div className="p-6 py-2 ">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
             <div>
                 <p className="font-medium text-gray-500 dark:text-gray-400">Amount</p>
@@ -94,7 +100,11 @@ props.transactions.map((tx:SuiTransactionBlockResponse)=>
             </div>
         </div>
     </div>
-</div>));
+</div> )
+ // end map
+} 
+</div>
+</>);
 
 
 };

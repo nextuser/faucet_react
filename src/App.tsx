@@ -41,8 +41,8 @@ const App = () => {
 
     return(
     <>
-
-<Grid columns="1" gap="2" maxWidth="620px">
+<center>
+<Grid columns="1" gap="2" maxWidth="800px">
 	<Box>
 		<Tabs.Root className="TabsRoot" defaultValue="tab1">
 			<Tabs.List className="TabsList" aria-label="Manage your account">
@@ -65,6 +65,7 @@ const App = () => {
 		<TransactionHistory transactions={transactions}/>
 	</Box>
 </Grid>
+</center>
     </>    
 );
 }

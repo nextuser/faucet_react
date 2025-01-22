@@ -106,7 +106,7 @@ const FaucetPage = ( props : {update_history : ()=>void }) => {
 
     useEffect( ()=>{
       if(recipient.length == 0){
-        setMsg('input your Sui address to receive Sui on testnet ');
+        setMsg('Input an address with a balance of at least 0.1 SUI on the mainnet');
         set_faucet_enable(false);
         return 
       }
@@ -153,7 +153,7 @@ const FaucetPage = ( props : {update_history : ()=>void }) => {
    
     return <>
  
- <Flex direction="column" gap="2" maxWidth="600px">
+ <Flex direction="column" gap="2" maxWidth="800px">
       <h1 className="text-2xl font-bold mb-4">Faucet@Sui_network</h1>
 
      
