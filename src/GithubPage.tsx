@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import "@radix-ui/themes/styles.css";
 import { Theme, Button,TextField,Box,Flex } from "@radix-ui/themes";
 import { FaucetResult } from 'common/type';
-// upload 的时候替换 github_config_local =》 github_config
-import {github_config_faucet as config}  from './site_config'
+//TODO upload 的时候替换 github_config_local =》 github_config
+import {github_config_local as config}  from './site_config'
 type UserType = {
   avatar_url: string;
   login: string;
@@ -34,7 +34,7 @@ function getMsg(result:FaucetResult){
   }
 }
 
-function GithubPage() {
+function GithubPage( props : { update_history : ()=>void }) {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code')
   
@@ -130,6 +130,7 @@ function GithubPage() {
       if(result.code == 'token_error'){
         oAuthReset();
       }
+      props.update_history();
       setMsg(getMsg(result))
       console.log("faucetresult", result);
       setLoading(false)

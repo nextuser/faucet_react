@@ -12,7 +12,7 @@
 
 // }
 export const github_config : SiteConfig={
-    redirect_uri : 'https://faucet-page.vercel.app',
+    redirect_uri : 'https://faucet-react.vercel.app',
     scope:'user:email',
     time_expired :  1000*60*10 ,//10 minutes  =>milliseconds
     client_id:'Ov23liymQHNmuLu3DL4d'  //faucetpage.vercel.app
