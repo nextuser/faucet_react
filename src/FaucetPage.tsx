@@ -191,7 +191,7 @@ const FaucetPage = () => {
       <div>
         <Button id="request_faucet"
           onClick={handleRequestFaucet}
-          className="bg-blue-300 text-white px-4 py-2 rounded dark:bg-blue-500 dark:hover:bg-blue-600 hover:bg-blue-400"
+          className="cursor-pointer w-full disabled:cursor-not-allowed"
           disabled={!faucet_enable}
         >
           Request Faucet
