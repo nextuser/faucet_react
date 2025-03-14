@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import "@radix-ui/themes/styles.css";
 import { Theme, Button,TextField,Box,Flex } from "@radix-ui/themes";
 import { FaucetResult } from 'common/type';
+import { Copy, Trash2 } from "lucide-react";
 //import {github_config_local } as config from './site_config'
 import {github_config_local as config}  from './site_config'
 type UserType = {
@@ -43,6 +44,18 @@ function GithubPage() {
   const [address,setAddress] = useState<string>("")
   const [msg,setMsg] = useState<string>("")
   const [userData,setUserData] = useState<UserType>()
+
+
+  const handleClearInput = () => {
+    setAddress('');
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(address).then(() => {
+    }).catch((err) => {
+      console.error("拷贝失败: ", err);
+    });
+  };
 
 //  成功 code=>token  ,失败 code =>init
   const queryCode = async (code :string) =>{
@@ -151,7 +164,17 @@ function GithubPage() {
     return <>
     	<Flex direction="column" gap="2" maxWidth="600px">
 	      <label htmlFor='address'>Sui address</label>
+        <div className="relative inline-block">
         <TextField.Root id="address" variant="surface" value={address} onChange={(e)=>setAddress(e.target.value)} placeholder="0xafed3..." />
+        <div className="absolute top-2 right-2 flex space-x-2">
+            <button onClick={handleCopy} className="text-gray-500 hover:text-gray-700">
+              <Copy size={20} />
+            </button>
+            <button onClick={handleClearInput} className="text-gray-500 hover:text-gray-700">
+              <Trash2 size={20} />
+            </button>
+        </div>
+        </div>
         <Button onClick={()=>requestFaucet(gitToken)} disabled={ gitToken == "" } >Reques Faucet</Button>
         <Button onClick={oAuthReset}>Unlink GitHub</Button>
         {msg && <label>{msg}</label>}

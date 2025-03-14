@@ -18,7 +18,7 @@ const MNEMONIC = process.env.MNEMONIC
 
 if(!clientId || !clientSecret || !MNEMONIC ){
 	console.log('set clientId or clientSecret MNEMONIC in ENV first');
-	exit(-1)
+	process.exit(-1)
 }
 
 

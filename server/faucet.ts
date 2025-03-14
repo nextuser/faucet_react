@@ -92,11 +92,6 @@ export async function github_faucet(token :string ,address : string ) : Promise<
     finally{
         warmSet.delete(user_id)
     }
-  
-
-
-
-    
 }
 
 export function  clearDaily(){

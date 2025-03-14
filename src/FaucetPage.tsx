@@ -3,38 +3,40 @@ import { SuiClient, getFullnodeUrl  } from '@mysten/sui/client';
 import { faucet_config } from '../common/config';
 import { FaucetResult } from '../common/type';
 import { Theme, Button,TextField,Box,Flex } from "@radix-ui/themes";
+import { Trash2 } from 'lucide-react';
 
 const FAUCET=faucet_config.faucet_address
-
+const address_msg = `Input an address with a balance of at least ${faucet_config.mainnet_balance_limit/1e9} SUI on the mainnet`
 
 function isAddrValid(str : string):boolean{
     if(str && str.length == 66 && str.startsWith('0x')){
         return true;
     }
+    
     return false;   
 }
 
-let test_client = new SuiClient({url:getFullnodeUrl('testnet')});
-let main_client = new SuiClient({url:getFullnodeUrl('mainnet')});
+const test_client = new SuiClient({url:getFullnodeUrl('testnet')});
+const main_client = new SuiClient({url:getFullnodeUrl('mainnet')});
 interface ReqData  {  
     FixedAmountRequest: {
         recipient: string
     }
   };
 
-const default_msg = `Welcome : faucet ${faucet_config.faucet_amount/1e9} SUI  testnet once a day, when you have at lease ${faucet_config.mainnet_balance_limit/1e9} SUI in mainnet`
+const default_msg = `Welcome : faucet ${faucet_config.faucet_amount/1e9} SUI  testnet once a day, when you have at lease ${faucet_config.mainnet_balance_limit/1e9} SUI in mainnet`;
 const FaucetPage = ( props : {update_history : ()=>void }) => {
     const [loading, setLoading] = useState(false);
-    let [ msg , setMsg ] = useState(''); 
-    let [recipient , setRecipient] = useState<string>('')
+    const [ msg , setMsg ] = useState(''); 
+    const [recipient , setRecipient] = useState<string>('')
 
-    let [mainnet_balance , set_mainnet_balance] = useState<number>(0)
-    let [testnet_balance , set_testnet_balance] = useState<number>(0)
+    const [mainnet_balance , set_mainnet_balance] = useState<number>(0)
+    const [testnet_balance , set_testnet_balance] = useState<number>(0)
 
-    let [total_balance ,set_total_balance] = useState<number>(0);
+    const [total_balance ,set_total_balance] = useState<number>(0);
 
-    let [faucet_enable , set_faucet_enable ] = useState(false)
-    let update_total =  ()=>{
+    const [faucet_enable , set_faucet_enable ] = useState(false)
+    const update_total =  ()=>{
       setLoading(true)
       test_client.getBalance({owner:FAUCET}).then((balance) => {
         console.log('Balance:', balance);
@@ -43,17 +45,23 @@ const FaucetPage = ( props : {update_history : ()=>void }) => {
       });
     }
 
+    const handleClearInput = ()=>{
+      setRecipient('');
+    }
+
     let update_recipient_test =  ()=>{
         test_client.getBalance({owner:recipient}).then((balance) => {
         console.log('Balance:', balance);
         set_testnet_balance(Number(balance.totalBalance)/1e9);
       });
     }
-    const redirect_faucet = ( e )=>{
-      const url = `https://faucet-rpc.vercel.app/v1/gas?recipient=${recipient}`
+    const redirect_faucet = ( e : React.FormEvent )=>{
+      
+      const url = `${window.location.protocol}//${window.location.hostname}/${faucet_config.rpc_url}?recipient=${recipient}`
+      console.log("redirect_faucet url:",url);
       window.location.href=url;
     }
-    let redirect = false;
+    const redirect = false;
     const handleRequestFaucet = async (e: React.FormEvent) => {
         e.preventDefault();
         if(redirect){
@@ -61,13 +69,13 @@ const FaucetPage = ( props : {update_history : ()=>void }) => {
           return;
         }
         set_faucet_enable(false);
-        let formData :ReqData ={
+        const formData :ReqData ={
             FixedAmountRequest:{
                 recipient:""
             }
         }
         formData.FixedAmountRequest.recipient = recipient;
-        let url =`${faucet_config.rpc_url}?recipient=${recipient}`;
+        const url =`${faucet_config.rpc_url}?recipient=${recipient}`;
         console.log(url);
         try {
           const res = await fetch(url, {
@@ -106,7 +114,7 @@ const FaucetPage = ( props : {update_history : ()=>void }) => {
 
     useEffect( ()=>{
       if(recipient.length == 0){
-        setMsg('Input an address with a balance of at least 0.1 SUI on the mainnet');
+        setMsg(default_msg);
         set_faucet_enable(false);
         return 
       }
@@ -137,13 +145,22 @@ const FaucetPage = ( props : {update_history : ()=>void }) => {
         if(isAddrValid(recipient)){ 
             main_client.getBalance({owner:recipient}).then((balance) => {
                 console.log('main Balance:', balance);
-                set_mainnet_balance(Number(balance.totalBalance)/1e9);
+                const m = Number(balance.totalBalance);
+                set_mainnet_balance(m / 1e9);
+                if(m < faucet_config.mainnet_balance_limit){
+                  setMsg(address_msg);
+                }
+
             });    
             update_recipient_test();
         }
-        else if(mainnet_balance != 0){
+        else{ 
+          
+          if(mainnet_balance != 0){
             set_mainnet_balance(0);
-        }
+          }
+          setMsg('address format invalid!');
+      }
 
       },[recipient])
 
@@ -173,17 +190,24 @@ const FaucetPage = ( props : {update_history : ()=>void }) => {
         <label htmlFor='testnet_balance'>Your balance@testnet</label>
         <TextField.Root id="testnet_balance" variant="surface" value={testnet_balance}  readOnly />
       </div>
-      <div>
+      <div >
         <label htmlFor='address'>Sui address</label>
+        <div className='inline-block w-full relative'>
         <TextField.Root id="address" variant="surface" value={recipient || ''}  onChange={(e)=>{
-          let addr = e.target.value
+          const addr = e.target.value
           if(addr.length == 0){
-            setMsg('Input an address with a balance of at least 0.1 SUI on the mainnet');
+            setMsg(default_msg);
           } else{
             setMsg('');
           }
           setRecipient(addr)
-        }} placeholder="0xaf83..."/>       
+        }} placeholder="0xaf83..."/>  
+        { recipient && <div className="absolute top-2 right-2 flex space-x-2">
+            <button onClick={handleClearInput} className="text-gray-500 hover:text-gray-700">
+              <Trash2 size={20} />
+            </button>
+        </div>}
+        </div>
       </div>
 
       <div>
@@ -194,7 +218,8 @@ const FaucetPage = ( props : {update_history : ()=>void }) => {
         >
           Request Faucet
         </Button>
-        {msg && <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{msg}</label>}
+        
+        {msg && <label  className="block mb-2 text-xl font-medium text-gray-900 dark:text-white">{msg}</label>}
       </div>
     </Flex>
 
